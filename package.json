@@ -1,7 +1,7 @@
 {
   "name": "red-agate-svg-canvas",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "red-agate svg canvas shared library.",
   "keywords": [
     "SVG",
@@ -17,11 +17,11 @@
     "node": "9.x"
   },
   "dependencies": {
-    "red-agate-util": "^0.0.2"
+    "red-agate-util": "^0.0.4"
   },
   "devDependencies": {
     "@types/jasmine": "^2.8.2",
-    "@types/node": "^8.0.53",
+    "@types/node": "^8.0.57",
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -42,7 +42,7 @@
     "ts-loader": "^3.1.1",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2",
-    "webpack": "^3.8.1"
+    "webpack": "^3.10.0"
   },
   "scripts": {
     "clean": "run-s clean:cjs clean:esm clean:spec",
