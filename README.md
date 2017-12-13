@@ -24,7 +24,7 @@ $ npm install red-agate-svg-canvas --save
 ## Usage
 
 ```typescript
-import { Rect2D }    from "red-agate-svg-canvas/modules/drawing/canvas/TransferMatrix2D";
+import { Rect2D }    from 'red-agate-svg-canvas/modules/drawing/canvas/TransferMatrix2D';
 import { SvgCanvas } from 'red-agate-svg-canvas/modules/drawing/canvas';
 
 const canvasCtx = new SvgCanvas();
@@ -43,7 +43,7 @@ console.log(svgString);
 ```
 
 
-## Licenses
+## License
 [ISC](https://github.com/shellyln/red-agate-util/blob/master/LICENSE.md)  
 Copyright (c) 2017, Shellyl_N and Authors.
 

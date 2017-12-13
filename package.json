@@ -6,6 +6,7 @@
   "keywords": [
     "SVG",
     "canvas",
+    "canvas2d",
     "html5"
   ],
   "main": "./bin/index.js",
