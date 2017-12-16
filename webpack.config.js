@@ -43,7 +43,7 @@ module.exports = function (env) {
                 },
                 exclude: [
                     // instead of /\/node_modules\//
-                    path.join(process.cwd(), 'node_modules')
+                    // path.join(process.cwd(), 'node_modules')
                 ]
             }]
         },
