@@ -504,18 +504,44 @@ export class SvgCanvas implements VectorCanvas2D {
     private content = "";
     private contentSaved = "";
     private idCount = 0;
+    private template: string | null = null;
 
     constructor() {
         this.graphicsStack.push(new SvgCanvasGraphicState());
+    }
+
+    public static fromTemplate(template: string): SvgCanvas {
+        const c = new SvgCanvas();
+        c.template = template;
+        return c;
     }
 
     public render(viewbox: Rect2D, unit: string = "mm"): string {
         const svgns = `xmlns="http://www.w3.org/2000/svg"`;
         const xlinkns = `xmlns:xlink="http://www.w3.org/1999/xlink"`;
         const vbox = `viewBox="${viewbox.x} ${viewbox.y} ${viewbox.w} ${viewbox.h}"`;
-        return `<svg ${svgns} ${xlinkns} version="1.1" width="${viewbox.w}${unit}" height="${viewbox.h}${unit}" ${vbox}>\n<defs>\n${
+        const defs = `<defs>\n${
                 this.assets.map(x => typeof x === "string" ? x : x.toDef()).join("\n")
-            }</defs>\n${this.contentSaved}${this.content}</svg>`;
+            }</defs>`;
+
+        if (! this.template) {
+            return `<svg ${svgns} ${xlinkns} version="1.1" width="${viewbox.w}${unit}" height="${viewbox.h}${unit}" ${vbox}>\n${
+                defs}\n${this.contentSaved}${this.content}</svg>`;
+        } else {
+            let tmpl = this.template.replace(/<\/svg>\s*$/, '');
+            tmpl = tmpl.replace(/(<svg[^>]*?)\s+?width\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/, `$1 width="${viewbox.w}${unit}"$2`);
+            tmpl = tmpl.replace(/(<svg[^>]*?)\s+?height\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/, `$1 height="${viewbox.h}${unit}"$2`);
+            tmpl = tmpl.replace(/(<svg[^>]*?)\s+?viewBox\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/, `$1 ${vbox}$2`);
+
+            if (! tmpl.match(/<svg[^>]*?\s+?xmlns:xlink\s*?=/)) {
+                tmpl = tmpl.replace(/<svg\s/, `<svg ${xlinkns} `);
+            }
+            if (! tmpl.match(/<svg[^>]*?\s+?xmlns\s*?=/)) {
+                tmpl = tmpl.replace(/<svg\s/, `<svg ${svgns} `);
+            }
+
+            return `${tmpl}\n${defs}\n${this.contentSaved}${this.content}</svg>`;
+        }
     }
 
     public toDataUrl(viewbox: Rect2D, unit: string = "mm", lineLength: number = 120): string {
