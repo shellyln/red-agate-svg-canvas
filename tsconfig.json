@@ -20,6 +20,13 @@
         "emitDecoratorMetadata": true,
         "baseUrl": ".",
         "paths": {
+            "red-agate-util": [
+                "../red-agate-util"
+            ],
+
+            "red-agate-util/*": [
+                "../red-agate-util/"
+            ],
         },
         // "traceResolution": true,
         "types": ["node", "jasmine"],
