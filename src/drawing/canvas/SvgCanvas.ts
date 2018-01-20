@@ -513,6 +513,7 @@ export class SvgCanvas implements VectorCanvas2D {
     public static fromTemplate(template: string): SvgCanvas {
         const c = new SvgCanvas();
         c.template = template;
+        c.idCount = new Date().getTime();
         return c;
     }
 
@@ -529,9 +530,31 @@ export class SvgCanvas implements VectorCanvas2D {
                 defs}\n${this.contentSaved}${this.content}</svg>`;
         } else {
             let tmpl = this.template.replace(/<\/svg>\s*$/, '');
-            tmpl = tmpl.replace(/(<svg[^>]*?)\s+?width\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/, `$1 width="${viewbox.w}${unit}"$2`);
-            tmpl = tmpl.replace(/(<svg[^>]*?)\s+?height\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/, `$1 height="${viewbox.h}${unit}"$2`);
-            tmpl = tmpl.replace(/(<svg[^>]*?)\s+?viewBox\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/, `$1 ${vbox}$2`);
+
+            {
+                const re = /(<svg[^>]*?)\s+?width\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/;
+                if (re.test(tmpl)) {
+                    tmpl = tmpl.replace(re, `$1 width="${viewbox.w}${unit}"$2`);
+                } else {
+                    tmpl = tmpl.replace(/<svg\s/, `<svg width="${viewbox.w}${unit}" `);
+                }
+            }
+            {
+                const re = /(<svg[^>]*?)\s+?height\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/;
+                if (re.test(tmpl)) {
+                    tmpl = tmpl.replace(re, `$1 height="${viewbox.h}${unit}"$2`);
+                } else {
+                    tmpl = tmpl.replace(/<svg\s/, `<svg height="${viewbox.h}${unit}" `);
+                }
+            }
+            {
+                const re = /(<svg[^>]*?)\s+?viewBox\s*?=\s*?["'](?:[^"'>]+?)["']([^>]*?>)/;
+                if (re.test(tmpl)) {
+                    tmpl = tmpl.replace(re, `$1 ${vbox}$2`);
+                } else {
+                    tmpl = tmpl.replace(/<svg\s/, `<svg ${vbox} `);
+                }
+            }
 
             if (! tmpl.match(/<svg[^>]*?\s+?xmlns:xlink\s*?=/)) {
                 tmpl = tmpl.replace(/<svg\s/, `<svg ${xlinkns} `);
